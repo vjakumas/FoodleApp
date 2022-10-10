@@ -16,48 +16,43 @@ Naudotojui gali būti pateikti receptai, kurių sudetį sudaro naudotojo turimi 
 ## Funkciniai reikalavimai
 3 CRUD - Kategorija -> Receptas -> Ingridientas.
 
-**Neregistruotas sistemos naudotojas (Svečias):**
+##Neregistruotas sistemos naudotojas (Svečias):
 
  - [ ] **Peržiūrėti sistemos reprezentacinį puslapį;**
  - [ ] **Peržiūrėti receptus;**
- - [ ] **Prisjungti prie sistemos;**
- - [ ] Susigeneruoti naują slaptažodį (jei naudotojas užmiršo savo slaptažodį);
-
-**Registruotas sistemos naudotojas (Naudotojas) gali:**
+ - [ ] **Prisjungti prie sistemos.**
 
 
+###Registruotas sistemos naudotojas (Naudotojas):
  - [ ] **Atsijungti nuo sistemos;**
- - [ ] **Pridėti produktą į produktų sąrašą;**
- - [ ] **Išmesti produktą iš produktų sarašo;**
- - [ ] **Matyti produktų sąrašą ir jų informaciją;**
- - [ ] **Redaguoti produkto informaciją;**
- - [ ] Ieškoti receptų:
-	 - [ ] Pagal turimus produktus;
-	 - [ ] Pagal pavadinimą;
-	 - [ ] Pagal konkrečius ingridientus.
- - [ ] Filtruoti turimų produktų sąrašą;
+ 
+ - [ ] **Peržiūrėti receptų sąrašą;**
+ - [ ] **Peržiūrėti recepto informacija;**
  - [ ] **Sukurti receptą;**
- - [ ] Paskelbti receptą;
  - [ ] **Šalinti receptą;**
- - [ ] **Redaguoti receptą;**
- - [ ] Įvertinti kitų receptą;
- - [ ] Peržiūrėti statistiką:
-	 - [ ] Kiek produktų išmesta, ir už kokią sumą išmesta produktų;
-	 - [ ] Kiek išleista pinigų maistui;
+ - [ ] **Redaguoti receptą.**
+ 
+ - [ ] **Pridėti ingridientą;**
+ - [ ] **Išmesti ingridientą;**
+ - [ ] **Peržiūrėti ingridientų sąrašą;**
+ - [ ] **Peržiūrėti ingridiento informaciją;**
+ - [ ] **Redaguoti ingridiento informaciją;**
 
 
-**Sistemos administratorius (Administratorius) gali:**
+###Sistemos administratorius (Administratorius):
 
  - [ ] **Sukurti paskyrą;**
  - [ ] **Šalinti paskyrą;**
- - [ ] Užblokuoti paskyrą (laikinai);
  - [ ] **Redaguoti paskyrą;**
+ 
  - [ ] **Pridėti kategoriją;**
  - [ ] **Ištrinti kategoriją;**
  - [ ] **Redaguoti kategorija;**
- - [ ] **Matyti kategorijas;**
+ - [ ] **Peržiūrėti kategorijų sąrašą;**
+ - [ ] **Peržiūrėti kategorijos informaciją;**
+ 
  - [ ] **Šalinti kitų receptus;**
- - [ ] **Redaguoti kitų receptus;**
+ - [ ] **Redaguoti kitų receptus.**
 
 
 
