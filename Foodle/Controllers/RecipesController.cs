@@ -73,7 +73,7 @@ namespace Foodle.Controllers
         // /api/v1/categories/{categoryId}/recipes/{recipeId}
         [HttpPut]
         [Route("{recipeId}")]
-        public async Task<ActionResult<RecipeDto>> Update(int categoryId, int recipeId, UpdateRecipeDto updateCategoryDto)
+        public async Task<ActionResult<RecipeDto>> Update(int categoryId, int recipeId, UpdateRecipeDto updateRecipeDto)
         {
             var category = await _categoriesRepository.GetAsync(categoryId);
 
@@ -91,8 +91,8 @@ namespace Foodle.Controllers
                 return NotFound();
             }
 
-            recipe.Name = updateCategoryDto.Name;
-            recipe.Description = updateCategoryDto.Description;
+            recipe.Name = updateRecipeDto.Name;
+            recipe.Description = updateRecipeDto.Description;
             recipe.LastUpdateDate = DateTime.UtcNow;
 
             await _recipesRepository.UpdateAsync(recipe);
