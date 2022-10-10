@@ -16,14 +16,14 @@ Naudotojui gali būti pateikti receptai, kurių sudetį sudaro naudotojo turimi 
 ## Funkciniai reikalavimai
 3 CRUD - Kategorija -> Receptas -> Ingridientas.
 
-##Neregistruotas sistemos naudotojas (Svečias):
+### Neregistruotas sistemos naudotojas (Svečias):
 
  - [ ] **Peržiūrėti sistemos reprezentacinį puslapį;**
  - [ ] **Peržiūrėti receptus;**
  - [ ] **Prisjungti prie sistemos.**
 
 
-###Registruotas sistemos naudotojas (Naudotojas):
+### Registruotas sistemos naudotojas (Naudotojas):
  - [ ] **Atsijungti nuo sistemos;**
  
  - [ ] **Peržiūrėti receptų sąrašą;**
@@ -39,7 +39,7 @@ Naudotojui gali būti pateikti receptai, kurių sudetį sudaro naudotojo turimi 
  - [ ] **Redaguoti ingridiento informaciją;**
 
 
-###Sistemos administratorius (Administratorius):
+### Sistemos administratorius (Administratorius):
 
  - [ ] **Sukurti paskyrą;**
  - [ ] **Šalinti paskyrą;**
