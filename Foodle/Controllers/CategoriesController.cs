@@ -82,8 +82,13 @@ namespace Foodle.Controllers
                 return NotFound();
             }
 
-            category.Name = updateCategoryDto.Name;
-            category.Description = updateCategoryDto.Description;
+            if (updateCategoryDto.Name != null)
+                category.Name = updateCategoryDto.Name;
+
+            if(updateCategoryDto.Description != null)
+                category.Description = updateCategoryDto.Description;
+
+
             category.LastUpdateDate = DateTime.UtcNow;
 
             await _categoriesRepository.UpdateAsync(category);

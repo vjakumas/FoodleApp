@@ -12,10 +12,13 @@ namespace Foodle.Controllers
         /api/v1/categories/{categoryId}/recipes/{recipeId}/ingredients/ - POST Create 201
         /api/v1/categories/{categoryId}/recipes/{recipeId}/ingredients/{igredientId} - PUT/PATCH Modify 200
         /api/v1/categories/{categoryId}/recipes/{recipeId}/ingredients/{ingredientId} - DELETE modify 200/204
+
+        /api/ingredients - GET List 200
+        /api/recipes/{recipeId}/ingredients - Get List 200
      */
 
     [ApiController]
-    [Route("api/categories/{categoryId}/recipes/{recipeId}/ingredients")]
+    [Route("api/")]
     public class IngredientsController : ControllerBase
     {
         private readonly IRecipesRepository _recipesRepository;
@@ -30,9 +33,33 @@ namespace Foodle.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<IngredientDto>> GetMany(int recipeId)
+        [Route("categories/{categoryId}/recipes/{recipeId}/ingredients")]
+        public async Task<IEnumerable<IngredientDto>> GetManyByCategoryRecipe(int recipeId)
         {
             var ingredients = await _ingredientsRepository.GetManyAsync(recipeId);
+
+            IEnumerable<IngredientDto> ingredientsDto = ingredients.Select(x => GetIngredientDto(x));
+
+            return ingredientsDto;
+        }
+
+        // /api/v1/recipes/{recipeId}/ingredients/{ingredientId}
+        [HttpGet]
+        [Route("recipes/{recipeId}/ingredients")]
+        public async Task<IEnumerable<IngredientDto>> GetManyByRecipe(int recipeId)
+        {
+            var ingredients = await _ingredientsRepository.GetManyAsync(recipeId);
+
+            IEnumerable<IngredientDto> ingredientsDto = ingredients.Select(x => GetIngredientDto(x));
+
+            return ingredientsDto;
+        }
+
+        [HttpGet]
+        [Route("ingredients")]
+        public async Task<IEnumerable<IngredientDto>> GetMany()
+        {
+            var ingredients = await _ingredientsRepository.GetManyAsync();
 
             IEnumerable<IngredientDto> ingredientsDto = ingredients.Select(x => GetIngredientDto(x));
 
@@ -42,8 +69,8 @@ namespace Foodle.Controllers
 
         // /api/v1/categories/{categoryId}/recipes/{recipeId}/ingredients/{ingredientId}
         [HttpGet]
-        [Route("{ingredientId}", Name = "GetIngredient")]
-        public async Task<ActionResult<IngredientDto>> Get(int recipeId, int ingredientId)
+        [Route("categories/{categoryId}/recipes/{recipeId}/ingredients/{ingredientId}")]
+        public async Task<ActionResult<IngredientDto>> GetByCategoryRecipe(int recipeId, int ingredientId)
         {
             var ingredient = await _ingredientsRepository.GetAsync(recipeId, ingredientId);
 
@@ -56,9 +83,41 @@ namespace Foodle.Controllers
             return GetIngredientDto(ingredient);
         }
 
+        // /api/recipes/{recipeId}/ingredients/{ingredientId}
+        [HttpGet]
+        [Route("recipes/{recipeId}/ingredients/{ingredientId}")]
+        public async Task<ActionResult<IngredientDto>> GetByRecipe(int ingredientId)
+        {
+            var ingredient = await _ingredientsRepository.GetIngredientAsync(ingredientId);
+
+            // 404
+            if (ingredient == null)
+            {
+                return NotFound();
+            }
+
+            return GetIngredientDto(ingredient);
+        }
+
+        // /api/ingredients/{ingredientId}
+        [HttpGet]
+        [Route("ingredients/{ingredientId}")]
+        public async Task<ActionResult<IngredientDto>> Get(int ingredientId)
+        {
+            var ingredient = await _ingredientsRepository.GetIngredientAsync(ingredientId);
+
+            // 404
+            if (ingredient == null)
+            {
+                return NotFound();
+            }
+
+            return GetIngredientDto(ingredient);
+        }
 
         // /api/v1/categories/{categoryId}/recipes/{recipeId}/ingredients/
         [HttpPost]
+        [Route("categories/{categoryId}/recipes/{recipeId}/ingredients")]
         public async Task<ActionResult<IngredientDto>> Create(int recipeId, CreateIngredientDto createIngredientDto)
         {
             var ingredient = new Ingredient { Name = createIngredientDto.Name, Description = createIngredientDto.Description, RecipeId = recipeId, Amount = createIngredientDto.Amount, Measurement = createIngredientDto.Measurement };
@@ -71,11 +130,11 @@ namespace Foodle.Controllers
         }
 
         [HttpPut]
-        [Route("{ingredientId}")]
+        [Route("categories/{categoryId}/recipes/{recipeId}/ingredients/{ingredientId}")]
         public async Task<ActionResult<IngredientDto>> Update(int categoryId, int recipeId, int ingredientId, UpdateIngredientDto updateIngredientDto)
         {
 
-            var recipe = await _recipesRepository.GetAsync(recipeId, categoryId);
+            var recipe = await _recipesRepository.GetByCategoryAsync(recipeId, categoryId);
 
             // 404
             if (recipe == null)
@@ -91,10 +150,17 @@ namespace Foodle.Controllers
                 return NotFound();
             }
 
-            ingredient.Name = updateIngredientDto.Name;
-            ingredient.Description = updateIngredientDto.Description;
-            ingredient.Amount = updateIngredientDto.Amount;
-            ingredient.Measurement = updateIngredientDto.Measurement;
+            if(updateIngredientDto.Name != null)
+                ingredient.Name = updateIngredientDto.Name;
+
+            if(updateIngredientDto.Description != null)
+                ingredient.Description = updateIngredientDto.Description;
+            
+            if(updateIngredientDto.Amount != 0)
+                ingredient.Amount = updateIngredientDto.Amount;
+
+            if(updateIngredientDto.Measurement != null)
+                ingredient.Measurement = updateIngredientDto.Measurement;
 
             await _ingredientsRepository.UpdateAsync(ingredient);
 
@@ -103,7 +169,7 @@ namespace Foodle.Controllers
 
         // /api/v1/categories/{categoryId}/recipes/{recipeId}
         [HttpDelete]
-        [Route("{ingredientId}")]
+        [Route("categories/{categoryId}/recipes/{recipeId}/ingredients/{ingredientId}")]
         public async Task<ActionResult> Remove(int ingredientId, int recipeId)
         {
             var ingredient = await _ingredientsRepository.GetAsync(recipeId, ingredientId);
@@ -118,6 +184,17 @@ namespace Foodle.Controllers
 
             //204
             return NoContent();
+        }
+
+        [HttpGet]
+        [Route("recipe/{recipeId}/ingredients")]
+        public async Task<IEnumerable<IngredientDto>> GetManyIngredientsByRecipe()
+        {
+            var ingredients = await _ingredientsRepository.GetManyAsync();
+
+            IEnumerable<IngredientDto> ingredientsDto = ingredients.Select(x => GetIngredientDto(x));
+
+            return ingredientsDto;
         }
 
 
