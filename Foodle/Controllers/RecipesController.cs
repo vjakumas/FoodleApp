@@ -1,10 +1,12 @@
-﻿using Foodle.Data.Dtos.Categories;
+﻿using Foodle.Data;
+using Foodle.Data.Dtos.Categories;
 using Foodle.Data.Dtos.Ingredients;
 using Foodle.Data.Dtos.Recipes;
 using Foodle.Data.Entities;
 using Foodle.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using System.Text.Json;
 
 
 /*
@@ -42,6 +44,74 @@ namespace Foodle.Controllers
             return recipesDto;
         }
 
+        //[HttpGet]
+        //[Route("recipes")]
+        //public async Task<IEnumerable<RecipeDto>> GetManyRecipes()
+        //{
+        //    var recipes = await _recipesRepository.GetManyAsync();
+
+        //    IEnumerable<RecipeDto> recipesDto = recipes.Select(x => GetRecipeDto(x));
+
+        //    return recipesDto;
+        //}
+
+        //api/recipes?pageNumber=1&pageSize=5
+        [HttpGet(Name = "GetRecipes")]
+        [Route("recipes")]
+        public async Task<IEnumerable<RecipeDto>> GetManyPaging([FromQuery] RecipesSearchParameters recipesSearchParameters)
+        {
+            var recipes = await _recipesRepository.GetManyAsync(recipesSearchParameters);
+
+            var previousLink = recipes.HasPrevious ?
+                CreateRecipesResourceUri(recipesSearchParameters, ResourceUriType.PreviousPage) : null;
+
+            var nextLink = recipes.HasNext ?
+                CreateRecipesResourceUri(recipesSearchParameters, ResourceUriType.NextPage) : null;
+
+            var paginationMetadata = new
+            {
+                totalCount = recipes.TotalCount,
+                pageSize = recipes.PageSize,
+                currentPage = recipes.CurrentPage,
+                totalPages = recipes.TotalPages,
+                previousLink,
+                nextLink
+            };
+
+
+            Response.Headers.Add("Pagination", JsonSerializer.Serialize(paginationMetadata));
+
+
+            IEnumerable<RecipeDto> recipesDto = recipes.Select(x => GetRecipeDto(x));
+
+            return recipesDto;
+        }
+
+        private string? CreateRecipesResourceUri(RecipesSearchParameters recipesSearchParameters, ResourceUriType type)
+        {
+            return type switch
+            {
+                ResourceUriType.PreviousPage => Url.Link("GetRecipes",
+                new
+                {
+                    pageNumber = recipesSearchParameters.PageNumber - 1,
+                    pageSize = recipesSearchParameters.PageSize,
+                }),
+                ResourceUriType.NextPage => Url.Link("GetRecipes",
+                new
+                {
+                    pageNumber = recipesSearchParameters.PageNumber + 1,
+                    pageSize = recipesSearchParameters.PageSize,
+                }),
+                _ => Url.Link("GetRecipse",
+                new
+                {
+                    pageNumber = recipesSearchParameters.PageNumber,
+                    pageSize = recipesSearchParameters.PageSize
+                })
+            };
+        }
+
         [HttpGet]
         [Route("recipes/{recipeId}")]
         public async Task<ActionResult<RecipeDto>> Get(int recipeId)
@@ -56,6 +126,7 @@ namespace Foodle.Controllers
 
             return GetRecipeDto(recipe);
         }
+
 
         // /api/v1/categories/{categoryId}/recipes/{recipeId}
         [HttpGet]
@@ -140,17 +211,6 @@ namespace Foodle.Controllers
 
             //204
             return NoContent();
-        }
-
-        [HttpGet]
-        [Route("recipes")]
-        public async Task<IEnumerable<RecipeDto>> GetManyRecipes()
-        {
-            var recipes = await _recipesRepository.GetManyAsync();
-
-            IEnumerable<RecipeDto> recipesDto = recipes.Select(x => GetRecipeDto(x));
-
-            return recipesDto;
         }
 
 

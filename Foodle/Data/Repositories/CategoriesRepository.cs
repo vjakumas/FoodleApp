@@ -1,4 +1,5 @@
-﻿using Foodle.Data.Entities;
+﻿using Foodle.Data.Dtos.Categories;
+using Foodle.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 

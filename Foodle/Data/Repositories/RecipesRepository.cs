@@ -1,4 +1,6 @@
-﻿using Foodle.Data.Entities;
+﻿using Foodle.Data.Dtos.Recipes;
+using Foodle.Data.Entities;
+using Foodle.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Foodle.Data.Repositories
@@ -8,6 +10,7 @@ namespace Foodle.Data.Repositories
         Task<Recipe?> GetByCategoryAsync(int recipeId, int categoryId);
         Task<Recipe?> GetAsync(int recipeId);
         Task<IReadOnlyList<Recipe>> GetManyByCategoryAsync(int categoryId);
+        Task<PagedList<Recipe>> GetManyAsync(RecipesSearchParameters recipesSearchParameters);
         Task<IReadOnlyList<Recipe>> GetManyAsync();
         Task CreateAsync(Recipe recipe);
         Task UpdateAsync(Recipe recipe);
@@ -36,6 +39,13 @@ namespace Foodle.Data.Repositories
         public async Task<IReadOnlyList<Recipe>> GetManyByCategoryAsync(int categoryId)
         {
             return await _context.Recipes.Where(x => x.CategoryId == categoryId).ToListAsync();
+        }
+
+        public async Task<PagedList<Recipe>> GetManyAsync(RecipesSearchParameters recipesSearchParameters)
+        {
+            var queryable = _context.Recipes.AsQueryable().OrderBy(o => o.CreationDate);
+
+            return await PagedList<Recipe>.CreateAsync(queryable, recipesSearchParameters.PageNumber, recipesSearchParameters.PageSize);
         }
 
         public async Task<IReadOnlyList<Recipe>> GetManyAsync()
