@@ -1,11 +1,15 @@
-﻿using Foodle.Data;
+﻿using Foodle.Auth.Model;
+using Foodle.Data;
 using Foodle.Data.Dtos.Categories;
 using Foodle.Data.Dtos.Ingredients;
 using Foodle.Data.Dtos.Recipes;
 using Foodle.Data.Entities;
 using Foodle.Data.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.IdentityModel.JsonWebTokens;
+using System.Security.Claims;
 using System.Text.Json;
 
 
@@ -148,9 +152,18 @@ namespace Foodle.Controllers
         // /api/v1/categories/{categoryId}/recipes
         [HttpPost]
         [Route("categories/{categoryId}/recipes")]
+        [Authorize(Roles = FoodleRoles.ForumUser)]
         public async Task<ActionResult<RecipeDto>> Create(int categoryId, CreateRecipeDto createRecipeDto)
         {
-            var recipe = new Recipe { Name = createRecipeDto.Name, Description = createRecipeDto.Description, CategoryId = categoryId, CreationDate = DateTime.UtcNow, LastUpdateDate = DateTime.UtcNow, IsPublic = true };
+            var recipe = new Recipe 
+            { 
+                Name = createRecipeDto.Name,
+                Description = createRecipeDto.Description,
+                CategoryId = categoryId, CreationDate = DateTime.UtcNow,
+                LastUpdateDate = DateTime.UtcNow,
+                IsPublic = true,
+                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub)
+                };
 
             await _recipesRepository.CreateAsync(recipe);
 
@@ -162,6 +175,7 @@ namespace Foodle.Controllers
         // /api/v1/categories/{categoryId}/recipes/{recipeId}
         [HttpPut]
         [Route("categories/{categoryId}/recipes/{recipeId}")]
+        [Authorize(Roles = FoodleRoles.ForumUser)]
         public async Task<ActionResult<RecipeDto>> Update(int categoryId, int recipeId, UpdateRecipeDto updateRecipeDto)
         {
             var category = await _categoriesRepository.GetAsync(categoryId);

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Foodle.Data.Entities
 {
-    public class Recipe
+    public class Recipe : IUserOwnedResource
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Foodle.Data.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Foodle.Auth.Model;
 
 namespace Foodle.Data
 {
-    public class FoodleDbContext : DbContext
+    public class FoodleDbContext : IdentityDbContext<FoodleRestUser>
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
