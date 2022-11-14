@@ -1,4 +1,7 @@
-﻿namespace Foodle.Data.Entities
+﻿using Foodle.Auth.Model;
+using System.ComponentModel.DataAnnotations;
+
+namespace Foodle.Data.Entities
 {
     public class Recipe
     {
@@ -9,5 +12,9 @@
         public DateTime LastUpdateDate { get; set; }
         public bool IsPublic { get; set; }
         public int CategoryId { get; set; }
+
+        [Required]
+        public string UserId { get; set; }
+        public FoodleRestUser User { get; set; }
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace Foodle.Data.Entities
+﻿using Foodle.Auth.Model;
+using System.ComponentModel.DataAnnotations;
+
+namespace Foodle.Data.Entities
 {
     public class Ingredient
     {
@@ -8,5 +11,9 @@
         public int Amount { get; set; }
         public string Measurement { get; set; }
         public int RecipeId { get; set; }
+
+        [Required]
+        public string UserId { get; set; }
+        public FoodleRestUser User { get; set; }
     }
 }
