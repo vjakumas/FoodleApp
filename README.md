@@ -63,4 +63,4 @@ Sistemos architektūros sudedamos dalys:
  - Serverio pusė (angl. Back-end) - naudojant .NET 6
  - Duomenų bazė: MySQL
 
-### Likusią dokumentaciją galite peržiūrėti "Projekto ataskaita.pdf" faile.
+### Likusią dokumentaciją galite peržiūrėti "[Projekto ataskaita.pdf](https://github.com/vjakumas/FoodleApp/blob/master/Projekto%20ataskaita.pdf)" faile.
