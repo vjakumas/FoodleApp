@@ -62,3 +62,5 @@ Sistemos architektūros sudedamos dalys:
  - Kliento pusė (angl. Front-end) - naudojant React.js
  - Serverio pusė (angl. Back-end) - naudojant .NET 6
  - Duomenų bazė: MySQL
+
+### Likusią dokumentaciją galite peržiūrėti "Projekto ataskaita.pdf" faile.
