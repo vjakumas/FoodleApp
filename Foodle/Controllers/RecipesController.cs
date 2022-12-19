@@ -66,24 +66,24 @@ namespace Foodle.Controllers
         {
             var recipes = await _recipesRepository.GetManyAsync(recipesSearchParameters);
 
-            var previousLink = recipes.HasPrevious ?
-                CreateRecipesResourceUri(recipesSearchParameters, ResourceUriType.PreviousPage) : null;
+            //var previousLink = recipes.HasPrevious ?
+            //    CreateRecipesResourceUri(recipesSearchParameters, ResourceUriType.PreviousPage) : null;
 
-            var nextLink = recipes.HasNext ?
-                CreateRecipesResourceUri(recipesSearchParameters, ResourceUriType.NextPage) : null;
+            //var nextLink = recipes.HasNext ?
+            //    CreateRecipesResourceUri(recipesSearchParameters, ResourceUriType.NextPage) : null;
 
-            var paginationMetadata = new
-            {
-                totalCount = recipes.TotalCount,
-                pageSize = recipes.PageSize,
-                currentPage = recipes.CurrentPage,
-                totalPages = recipes.TotalPages,
-                previousLink,
-                nextLink
-            };
+            //var paginationMetadata = new
+            //{
+            //    totalCount = recipes.TotalCount,
+            //    pageSize = recipes.PageSize,
+            //    currentPage = recipes.CurrentPage,
+            //    totalPages = recipes.TotalPages,
+            //    previousLink,
+            //    nextLink
+            //};
 
 
-            Response.Headers.Add("Pagination", JsonSerializer.Serialize(paginationMetadata));
+            //Response.Headers.Add("Pagination", JsonSerializer.Serialize(paginationMetadata));
 
 
             IEnumerable<RecipeDto> recipesDto = recipes.Select(x => GetRecipeDto(x));
@@ -155,14 +155,14 @@ namespace Foodle.Controllers
         [Authorize(Roles = FoodleRoles.ForumUser)]
         public async Task<ActionResult<RecipeDto>> Create(int categoryId, CreateRecipeDto createRecipeDto)
         {
-            var recipe = new Recipe 
-            { 
+            var recipe = new Recipe
+            {
                 Name = createRecipeDto.Name,
+                ImageURL = createRecipeDto.ImageURL,
                 Description = createRecipeDto.Description,
                 CategoryId = categoryId, CreationDate = DateTime.UtcNow,
                 LastUpdateDate = DateTime.UtcNow,
-                IsPublic = true,
-                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub)
+                IsPublic = true
                 };
 
             await _recipesRepository.CreateAsync(recipe);
@@ -200,6 +200,9 @@ namespace Foodle.Controllers
             if(updateRecipeDto.Description != null)
                 recipe.Description = updateRecipeDto.Description;
 
+            if (updateRecipeDto.ImageURL != null)
+                recipe.ImageURL = updateRecipeDto.ImageURL;
+
             recipe.LastUpdateDate = DateTime.UtcNow;
 
             await _recipesRepository.UpdateAsync(recipe);
@@ -230,7 +233,7 @@ namespace Foodle.Controllers
 
         public RecipeDto GetRecipeDto(Recipe recipe)
         {
-            return new RecipeDto(recipe.Id, recipe.Name, recipe.Description, recipe.CreationDate, recipe.LastUpdateDate, recipe.IsPublic, recipe.CategoryId);
+            return new RecipeDto(recipe.Id, recipe.Name, recipe.ImageURL, recipe.Description, recipe.CreationDate, recipe.LastUpdateDate, recipe.IsPublic, recipe.CategoryId);
         }
     }
 }

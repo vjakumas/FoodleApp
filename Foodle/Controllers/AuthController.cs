@@ -1,6 +1,7 @@
 ﻿using Foodle.Auth;
 using Foodle.Auth.Model;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace Foodle.Controllers
 {
     [ApiController]
     [AllowAnonymous]
+    [EnableCors("AllowOrigin")]
     [Route("api/")]
     public class AuthController : ControllerBase
     {

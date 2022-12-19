@@ -45,6 +45,7 @@ builder.Services.AddSingleton<IAuthorizationHandler, ResourceOwnerAuthorizationH
 var app = builder.Build();
 
 app.UseRouting();
+app.UseCors();
 app.MapControllers();
 
 app.UseAuthentication();

@@ -3,7 +3,7 @@
     public class RecipesSearchParameters
     {
         // api/recipes
-        private int _pageSize = 2;
+        private int _pageSize = 20;
         private const int MaxPageSize = 50;
 
         public int PageNumber { get; init; } = 1;
